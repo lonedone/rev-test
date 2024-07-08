@@ -27,6 +27,7 @@ local/db        - test database deployment for local development
 docker-compose up -d
 ```
 That DB will be used for integration testing
+
 2. Navigate to `app` and run
 ```
 npm i
@@ -34,6 +35,7 @@ npm i
 ```
 npm test
 ```
+
 3. To run the application in a hot reload mode
 `npm run dev`
 
@@ -100,13 +102,13 @@ RollingUpdate may be fine-tuned to improve deployments under load.
 
 Timezone of the server is considered to be a pivot for days difference calculation.
 
-Since there is no "you BD tomorrow" sentence, I consider it to be "in 1 day"
+Since there is no "you BD tomorrow" sentence in the task, I consider it to be "in 1 day"
 
-In the current implementation migrations are done as part of the application, that works here considering the amount of living replicas not updating more than one application per time, but for real-life applications migrations should be executed as a separate task.
+In the current implementation migrations are done as part of the application, that works here considering the amount of living replicas and that they are not updated more than one application at a time, but for real-life application migrations should be executed as a separate task.
 
 It would make sense to use self-hosted K8S to reduce costs, but since there is no restriciton on that I use EKS here.
 
-There are no tight security groups, firewalls, policies etc. Pod security groups, aws and k8s secrets, and other resources could be used to improve the overall security.
+There are no tight security groups, firewalls, policies etc. Pod security groups, aws and k8s secrets, and other resources could be used to raise the overall security level.
 
 ECR could be used as a registry, but I used Github Packages as it is free.
 
@@ -123,3 +125,5 @@ Versioning must be enabled.
 Default namespace used.
 
 DB master username should not be used for migrations and in the application, here it is used as it is a simple test application.
+
+CI/CD is not onboarded.
