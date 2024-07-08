@@ -1,0 +1,4 @@
+CREATE DATABASE users_db;
+CREATE USER users_u WITH ENCRYPTED PASSWORD 'LocalPassword';
+GRANT ALL PRIVILEGES ON DATABASE users_db TO users_u;
+ALTER DATABASE users_db OWNER TO users_u;
