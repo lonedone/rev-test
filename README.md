@@ -66,8 +66,7 @@ However, if you want to push your own image:
 ```
 docker login --username your_gh_username --password your_gh_token ghcr.io
 docker buildx . -t ghcr.io/your_username/your_repo:latest --platform=linux/amd64
-docker run -p 8080:8080 --name rev-test -d ghcr.io/your_username/your_repo:latest
-docker pull ghcr.io/your_username/your_repo:latest
+docker push ghcr.io/your_username/your_repo:latest
 ```
 
 1. Run
