@@ -71,9 +71,9 @@ docker buildx . -t ghcr.io/your_username/your_repo:latest --platform=linux/amd64
 docker push ghcr.io/your_username/your_repo:latest
 ```
 
-1. Run
+1. Run from the repo root
 ```
-export DB_ADDRESS=$(jq -r '.outputs.db_address' infra/terraform/terraform\ copy.tfstate); yq eval -i '.env.DB_HOST = env(DB_ADDRESS)' chart/app/values.yaml
+export DB_ADDRESS=$(jq -r '.outputs.db_address.value' infra/terraform/terraform.tfstate); yq eval -i '.env.DB_HOST = env(DB_ADDRESS)' chart/app/values.yaml
 ```
 2. aws eks update-kubeconfig --region us-east-1 --name test-cluser  
 3. kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
@@ -85,13 +85,11 @@ helm upgrade --install alb .
 ```
 helm upgrade --install test-app .
 ```
-6. Run the following command
-`export LB_DNS_NAME=$(kubectl describe service test-app-service | grep "LoadBalancer Ingress" | awk '{print $3}'); export API_URL="http://${LB_DNS_NAME}/"`
+6. Once the application is deployed (you may check the status and events with a k9s tool) run the following command
+`export LB_DNS_NAME=$(kubectl describe service test-app-service | grep "LoadBalancer Ingress" | awk '{print $3}'); export API_URL="http://${LB_DNS_NAME}"`
 7. Navigate to `app` and run
 `npm run system_test`
 That will run tests against the application deployed to the cluster
-
-You may use `k9s` tool to check the cluster resources and events
 
 ## Some important considerations
 
@@ -102,7 +100,7 @@ RollingUpdate may be fine-tuned to improve deployments under load.
 
 Timezone of the server is considered to be a pivot for days difference calculation.
 
-Since there is no "you BD tomorrow" sentence in the task, I consider it to be "in 1 day"
+Since there is no "your BD is tomorrow" sentence in the task, I consider it to be "in 1 day"
 
 In the current implementation migrations are done as part of the application, that works here considering the amount of living replicas and that they are not updated more than one application at a time, but for real-life application migrations should be executed as a separate task.
 
