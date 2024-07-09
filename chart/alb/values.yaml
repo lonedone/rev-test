@@ -1,6 +1,0 @@
-clusterName: "test-cluster"
-region: "us-east-1"
-vpcId: "vpc-0f33a7a4d0672971a"
-serviceAccount:
-  name: alb-ingress-controller
-  create: false

@@ -12,13 +12,14 @@ local/db        - test database deployment for local development
 
 ## Preparation
 
-1. You need an AWS account and an IAM user with an access key and administrative access
-2. AWS CLI should be installed (v2.17.9 or higher is preferable)
-3. Terraform should be installed (v1.9.1 or higher is preferable)
-4. NodeJS v20 should be installed
-5. Helm should be installed
-6. Kubectl should be installed
-7. jq and yq are present
+1. This guide expects that you run a unix-like OS such as macos
+2. You need an AWS account and an IAM user with an access key and administrative access
+3. AWS CLI should be installed (v2.17.9 or higher is preferable)
+4. Terraform should be installed (v1.9.1 or higher is preferable)
+5. NodeJS v20 should be installed
+6. Helm should be installed
+7. Kubectl should be installed
+8. jq and yq should be installed
 
 ## Local development
 
@@ -75,23 +76,23 @@ docker push ghcr.io/your_username/your_repo:latest
 ```
 export DB_ADDRESS=$(jq -r '.outputs.db_address.value' $(git rev-parse --show-toplevel)/infra/terraform/terraform.tfstate); yq eval -i '.env.DB_HOST = env(DB_ADDRESS)' $(git rev-parse --show-toplevel)/chart/app/values.yaml
 ```
+
 2. Run the following command to update the cluster config
 ```
 aws eks update-kubeconfig --region us-east-1 --name test-cluser
 ```
-2. Run the following command to install ALB-related resources
-kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
-3. Navigate to `chart/alb` and run 
-```
-helm upgrade --install alb .
-```
-1. Navigate to `chart/app` and run app installation
+
+4. Navigate to `chart/app` and run app installation
 ```
 helm upgrade --install test-app .
 ```
-1. Once the application is deployed (you may check the status and events with a k9s tool) run the following command to export deployed application ALB url
-`export LB_DNS_NAME=$(kubectl describe service test-app-service | grep "LoadBalancer Ingress" | awk '{print $3}'); export API_URL="http://${LB_DNS_NAME}"`
-1. Navigate to `app` and run system tests
+
+5. Once the application is deployed (you may check the status and events with a k9s tool) run the following command to export deployed application ALB url
+```
+export LB_DNS_NAME=$(kubectl describe service test-app-service | grep "LoadBalancer Ingress" | awk '{print $3}'); export API_URL="http://${LB_DNS_NAME}"
+```
+
+6. Navigate to `app` and run system tests
 `npm run system_test`
 That command will run tests against the application deployed to the cluster
 
