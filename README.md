@@ -2,8 +2,6 @@
 
 app             - application sources in Javascript (NodeJS)
 
-chart/alb       - helm charts and templates of the ALB controller
-
 chart/app       - halm charts and templates of the application
 
 infra/terraform - IaC sources of the deployable infrastructure
